@@ -4,7 +4,18 @@ import styles from './page.module.css';
 import { getMeal } from '@/lib/meals';
 import { notFound } from 'next/navigation';
 
-export default function MealsPage({ params }) {
+//dynamic MetaData
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const meal = getMeal(slug);
+  if (!meal) notFound();
+  return {
+    title: meal.title,
+    description: meal.summary,
+  };
+}
+
+export default function MealDetailsPage({ params }) {
   //   const { slug } = await params;
   const { slug } = use(params);
   const objMealDetails = getMeal(slug);
